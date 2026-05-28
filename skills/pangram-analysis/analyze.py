@@ -191,6 +191,73 @@ def inject_meta_line(
     return html[: m.start(2)] + new_meta + html[m.end(2) :]
 
 
+# -------- listing-page meta update -----------------------------------------
+
+LI_RE = re.compile(r"<li(?:\s[^>]*)?>.*?</li>", re.DOTALL)
+LISTING_META_RE = re.compile(r'(<p class="meta">)([^<]*)(</p>)')
+
+
+def _build_tail(mins: int, human_pct: int | None, ai_pct: int | None) -> str:
+    tail = f"{mins} min read"
+    if human_pct is not None:
+        tail += f" · {human_pct}% human"
+        if ai_pct is not None and ai_pct >= 5:
+            tail += f" · {ai_pct}% AI"
+    return tail
+
+
+def update_listing(listing_path: Path, metadata: dict) -> int:
+    """
+    Update the <p class='meta'> inside every <li> on a listing page (index.html
+    or notes.html) with the reading time + Pangram breakdown of the article
+    that <li>'s <h2><a> points to. Returns the number of <li>s updated.
+    """
+    if not listing_path.exists():
+        return 0
+    html = listing_path.read_text()
+    updated = 0
+
+    def process_li(li_match: re.Match) -> str:
+        nonlocal updated
+        li = li_match.group(0)
+        h2_href = re.search(r'<h2><a href="([^"]+)"', li)
+        if not h2_href:
+            return li
+        href = h2_href.group(1)
+        if href not in metadata:
+            return li
+        entry = metadata[href]
+        mins = entry.get("read_time_min")
+        if mins is None:
+            return li
+        pg = entry.get("pangram") or {}
+        h_pct = (
+            round(100 * pg["fraction_human"])
+            if pg.get("fraction_human") is not None
+            else None
+        )
+        a_pct = (
+            round(100 * ((pg.get("fraction_ai") or 0) + (pg.get("fraction_ai_assisted") or 0)))
+            if pg.get("fraction_ai") is not None
+            else None
+        )
+        tail = _build_tail(mins, h_pct, a_pct)
+
+        def update_meta(mm: re.Match) -> str:
+            existing = INJECT_RE.sub("", mm.group(2)).rstrip()
+            return f"{mm.group(1)}{existing} · {tail}{mm.group(3)}"
+
+        new_li, n = LISTING_META_RE.subn(update_meta, li, count=1)
+        if n:
+            updated += 1
+        return new_li
+
+    new_html = LI_RE.sub(process_li, html)
+    if new_html != html:
+        listing_path.write_text(new_html)
+    return updated
+
+
 # -------- targets ----------------------------------------------------------
 
 def discover_targets(blog_root: Path) -> list[Path]:
@@ -349,6 +416,13 @@ def main() -> None:
 
     meta_path.write_text(json.dumps(metadata, indent=2, sort_keys=True) + "\n")
     print(f"\nWrote {meta_path.name}")
+
+    # Refresh the summary listings so the reading-time / Pangram pills appear
+    # next to each entry on / (essays) and /notes.
+    for listing in ("index.html", "notes.html"):
+        n = update_listing(blog_root / listing, metadata)
+        if n:
+            print(f"UPDATED LISTING:   {listing}  ({n} entries)")
 
 
 if __name__ == "__main__":
