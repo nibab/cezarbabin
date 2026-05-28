@@ -71,7 +71,7 @@
   <script>
     window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
   </script>
-  <!-- Custom outbound click tracking -->
+  <!-- Custom event tracking: outbound clicks + article views -->
   <script>
     (function () {
       document.addEventListener('click', function (e) {
@@ -79,6 +79,13 @@
         if (!a || !a.hostname || a.hostname === location.hostname) return;
         window.va('event', { name: 'outbound_click', data: { href: a.href, host: a.hostname } });
       }, true);
+    })();
+    (function () {
+      var m = location.pathname.match(/^\/essays\/(.+?)\.html$/);
+      if (!m) return;
+      var titleEl = document.querySelector('.post h1');
+      var title = (titleEl && titleEl.textContent.trim()) || document.title.replace(/ — .*$/, '');
+      window.va('event', { name: 'article_view', data: { slug: m[1], title: title } });
     })();
   </script>
   <script defer src="/_vercel/insights/script.js"></script>
