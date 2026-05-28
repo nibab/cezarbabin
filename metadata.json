@@ -1,0 +1,32 @@
+{
+  "essays/chatgpt-is-the-new-browser.html": {
+    "analyzed_at": "2026-05-28T21:43:42+00:00",
+    "read_time_min": 3,
+    "skill_version": "1",
+    "words": 636
+  },
+  "essays/innovation-and-survival.html": {
+    "analyzed_at": "2026-05-28T21:43:43+00:00",
+    "read_time_min": 4,
+    "skill_version": "1",
+    "words": 836
+  },
+  "essays/open-source-will-eat-vertical-ai.html": {
+    "analyzed_at": "2026-05-28T21:43:43+00:00",
+    "read_time_min": 9,
+    "skill_version": "1",
+    "words": 1957
+  },
+  "essays/search-not-ai-is-still-king.html": {
+    "analyzed_at": "2026-05-28T21:43:44+00:00",
+    "read_time_min": 2,
+    "skill_version": "1",
+    "words": 362
+  },
+  "notes/discovery-vs-tokenmaxxing.html": {
+    "analyzed_at": "2026-05-28T21:43:44+00:00",
+    "read_time_min": 2,
+    "skill_version": "1",
+    "words": 427
+  }
+}

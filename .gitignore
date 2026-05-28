@@ -4,3 +4,8 @@ node_modules/
 *.log
 .env
 .env.local
+
+# Local-only credentials (never check in)
+.pangram_key
+*.local-secret
+metadata.local.json
