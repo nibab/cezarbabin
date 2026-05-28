@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /essays/test-post.html
+
+Sitemap: https://cezarbabin.com/sitemap.xml

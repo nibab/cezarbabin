@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Test post: images, videos, lists, code, widgets — Cezar Babin</title>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300..700&display=swap" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="../style.css">
+<script>
+  // Local-only post. If served from any non-local hostname, bounce back home.
+  (function () {
+    var h = location.hostname;
+    if (!(h === 'localhost' || h === '127.0.0.1' || h === '0.0.0.0' || h === '')) {
+      location.replace('../index.html');
+    }
+  })();
+</script>
+</head>
+<body>
+  <div class="site">
+    <header class="site-header">
+      <h1>
+        <a href="../index.html">
+<pre class="ascii-banner" aria-hidden="true">                          _           _     _
+  ___ ___ ______ _ _ __  | |__   __ _| |__ (_)_ __
+ / __/ _ \_  / _` | '__| | '_ \ / _` | '_ \| | '_ \
+| (_|  __// / (_| | |    | |_) | (_| | |_) | | | | |
+ \___\___/___\__,_|_|    |_.__/ \__,_|_.__/|_|_| |_|</pre>
+          <span class="sr-only">cezar babin</span>
+        </a>
+      </h1>
+      <nav class="site-nav">
+        <a href="../about.html">About</a>
+        <a href="../index.html" class="active">Essays</a>
+        <a href="../projects.html">Projects</a>
+      </nav>
+    </header>
+  </div>
+  <hr class="divider">
+
+  <div class="site">
+    <main class="content post">
+      <h1>Test post: images, videos, lists, code, widgets</h1>
+      <p class="meta">2026 · Internal test · localhost only</p>
+
+      <p>This post exists to smoke-test every renderable primitive in the blog: inline images (with optional captions), embedded YouTube videos, ordered + unordered + nested bullet point lists, inline + block code, link styling in prose, and inline JS widgets. Each section below uses the literal markup pattern you'd copy into a real essay.</p>
+
+      <hr class="in-post">
+
+      <h2>1. Images</h2>
+
+      <p>A standalone image. It should shrink to the column width on every viewport (no horizontal scroll on mobile), keep its aspect ratio, and sit on its own line:</p>
+
+      <img src="https://picsum.photos/seed/babin-blog-1/1200/675"
+           alt="Test photo: a randomly seeded landscape image from Picsum, used as a placeholder">
+
+      <p>Same image wrapped in a <code>&lt;figure&gt;</code> with a caption — the caption renders at 11px in gray, centered under the image:</p>
+
+      <figure>
+        <img src="https://picsum.photos/seed/babin-blog-2/1200/675"
+             alt="Second test photo with a caption">
+        <figcaption>
+          Figure 1. A captioned image. Captions should sit centered under the photo at 11px,
+          colored <em>#5d5d5d</em>, matching the meta line under post titles.
+        </figcaption>
+      </figure>
+
+      <p>A narrower image (600px source). It should not be stretched up to the column width — it stays its natural size and centers:</p>
+
+      <img src="https://picsum.photos/seed/babin-blog-3/600/400"
+           alt="Smaller test photo, 600×400, to verify images smaller than the column don't get upscaled"
+           width="600" height="400">
+
+      <hr class="in-post">
+
+      <h2>2. YouTube embeds</h2>
+
+      <p>The video container preserves a 16:9 aspect ratio at any column width, so the player never letterboxes or overflows. Source: Steve Jobs's 2005 Stanford commencement — a nice canonical "always there" video for embed testing.</p>
+
+      <div class="video-embed">
+        <iframe src="https://www.youtube.com/embed/UF8uR6Z6KLc"
+                title="Steve Jobs' 2005 Stanford Commencement Address"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen
+                loading="lazy"
+                referrerpolicy="strict-origin-when-cross-origin"></iframe>
+      </div>
+
+      <p>To embed any other YouTube video, grab the ID from the URL (the part after <code>watch?v=</code>) and drop it into the same <code>&lt;div class="video-embed"&gt;</code> wrapper. The CSS handles the rest.</p>
+
+      <hr class="in-post">
+
+      <h2>3. Bullet point lists</h2>
+
+      <p>Unordered list with three items:</p>
+      <ul>
+        <li>Each item sits 6px below the previous one.</li>
+        <li>List font-size matches body copy: 12px Open Sans 300, black.</li>
+        <li>The bullet hangs at <em>22px</em> indent — enough to clear long-text wrapping.</li>
+      </ul>
+
+      <p>Ordered list, with a nested unordered list to verify hierarchy:</p>
+      <ol>
+        <li>Top-level item one.</li>
+        <li>
+          Top-level item two, with a nested set:
+          <ul>
+            <li>Nested item A — the bullet style should switch from disc to circle automatically.</li>
+            <li>Nested item B — vertical rhythm should stay tight (nested gap = 4px, not 14px).</li>
+          </ul>
+        </li>
+        <li>Top-level item three.</li>
+      </ol>
+
+      <p>And a deeper nest to stress test the rules:</p>
+      <ul>
+        <li>
+          Outer item
+          <ul>
+            <li>
+              Middle item
+              <ul>
+                <li>Innermost item — three levels deep should still render cleanly with consistent indent.</li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+
+      <hr class="in-post">
+
+      <h2>4. Code blocks</h2>
+
+      <p>Inline <code>code</code> uses a 13px monospace with a subtle background tint, padded to read like a keyboard input. Multi-line blocks render in a soft panel that scrolls horizontally on long lines so the column never breaks on mobile.</p>
+
+      <p>Ruby:</p>
+      <pre><code>class University &lt; ActiveRecord::Base
+  ALIAS_DOMAINS = { "gmail.com" =&gt; "upenn.edu" }.freeze
+
+  def self.match_name_for_email(email)
+    return nil if email.blank?
+    e = email.downcase
+    aliased = ALIAS_DOMAINS.find { |d, _| e.include?(d) }
+    return aliased.last if aliased
+    pluck(:name).find { |name| e.include?(name) }
+  end
+end</code></pre>
+
+      <p>JavaScript:</p>
+      <pre><code>// debounce — wait until the user stops typing
+function debounce(fn, ms = 300) {
+  let t;
+  return (...args) =&gt; {
+    clearTimeout(t);
+    t = setTimeout(() =&gt; fn(...args), ms);
+  };
+}</code></pre>
+
+      <p>Shell:</p>
+      <pre><code># rebuild the dev image and restart the container
+docker build --platform linux/amd64 -f Dockerfile.dev -t pentalist:dev .
+docker rm -f pentalist
+docker run -d --name pentalist -p 3000:3000 -v "$PWD:/app" pentalist:dev</code></pre>
+
+      <p>HTML (escaped so the markup shows verbatim):</p>
+      <pre><code>&lt;div class="video-embed"&gt;
+  &lt;iframe src="https://www.youtube.com/embed/UF8uR6Z6KLc"
+          loading="lazy" allowfullscreen&gt;&lt;/iframe&gt;
+&lt;/div&gt;</code></pre>
+
+      <p>And an intentionally long line to verify horizontal scroll kicks in instead of wrapping or breaking the column:</p>
+      <pre><code>const really_long_identifier_that_keeps_going = some_function_call(argument_one, argument_two, argument_three, argument_four) // this line should scroll horizontally inside the code block</code></pre>
+
+      <hr class="in-post">
+
+      <h2>5. Links</h2>
+
+      <p>Standard external link to <a href="https://en.wikipedia.org/wiki/Hypertext" target="_blank" rel="noopener">Wikipedia</a> inside running prose. Green (<code>#2d993e</code>) with no underline by default; hover darkens to <code>#057c4c</code> and underlines.</p>
+
+      <p>Internal link to <a href="../about.html">about</a>, another to <a href="../projects.html">projects</a>, and back to <a href="../index.html">all essays</a> — same styling regardless of target.</p>
+
+      <p>A long URL that should soft-wrap inside the column without overflowing on mobile: <a href="https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol_Secure">https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol_Secure</a>.</p>
+
+      <p>A link nested inside emphasis: <em>see also <a href="open-source-will-eat-vertical-ai.html">the open-source essay</a></em> — the link color should win over <em>italic</em>'s default color and still be green.</p>
+
+      <p>A link inside <strong>strong</strong>: <strong>important: <a href="search-not-ai-is-still-king.html">search-not-AI</a></strong> stays bold and green.</p>
+
+      <p>A link sitting next to inline <code>code()</code> like <a href="https://developer.mozilla.org/" target="_blank" rel="noopener">MDN</a> shouldn't visually collide with the tinted code background.</p>
+
+      <hr class="in-post">
+
+      <h2>6. JS widgets</h2>
+
+      <p>Widgets are arbitrary inline interactive components inside <code>&lt;div class="js-widget"&gt;</code>. They get the same soft-panel chrome as code blocks. Each widget contains its own <code>&lt;script&gt;</code>, scoped to itself via <code>document.currentScript.closest('.js-widget')</code>, so multiple instances coexist without name collisions.</p>
+
+      <p>A click counter — proves event listeners and DOM scoping work:</p>
+
+      <div class="js-widget">
+        <p>Count: <output>0</output></p>
+        <button class="inc">+1</button>
+        <button class="reset">reset</button>
+        <script>
+          (function () {
+            var w = document.currentScript.closest('.js-widget');
+            var n = 0;
+            var out = w.querySelector('output');
+            w.querySelector('.inc').addEventListener('click', function () {
+              n++;
+              out.textContent = n;
+            });
+            w.querySelector('.reset').addEventListener('click', function () {
+              n = 0;
+              out.textContent = n;
+            });
+          })();
+        </script>
+      </div>
+
+      <p>A live character counter on a text input — proves <code>input</code> events and reactive output work:</p>
+
+      <div class="js-widget">
+        <input type="text" placeholder="Type something…">
+        <p style="margin-top:8px;">Length: <output>0</output></p>
+        <script>
+          (function () {
+            var w = document.currentScript.closest('.js-widget');
+            var input = w.querySelector('input');
+            var out = w.querySelector('output');
+            input.addEventListener('input', function (e) {
+              out.textContent = e.target.value.length;
+            });
+          })();
+        </script>
+      </div>
+
+      <p>A second counter — should be totally independent of the first (its own <code>n</code> scope):</p>
+
+      <div class="js-widget">
+        <p>Independent counter: <output>0</output></p>
+        <button class="inc">+1</button>
+        <script>
+          (function () {
+            var w = document.currentScript.closest('.js-widget');
+            var n = 0;
+            var out = w.querySelector('output');
+            w.querySelector('.inc').addEventListener('click', function () {
+              n++;
+              out.textContent = n;
+            });
+          })();
+        </script>
+      </div>
+
+      <hr class="in-post">
+
+      <h2>Sanity checks</h2>
+
+      <ul>
+        <li>On a phone-width viewport (&lt;360px), the column padding drops to 16px, nav links tighten to 6px, and images/video stay within the column.</li>
+        <li>Hovering any green link should darken to <em>#057c4c</em> and underline.</li>
+        <li>The two hairline dividers above and below the content area mark "where the post ends," same as the Pentalist <code>/submits/new</code> layout.</li>
+      </ul>
+
+      <p class="post-nav">← <a href="../index.html">All essays</a></p>
+    </main>
+  </div>
+
+  <hr class="divider">
+  <footer class="site-footer">
+    <div class="links">
+      <a href="https://x.com/n1babc" target="_blank" rel="noopener" aria-label="X (formerly Twitter)">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.451-6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77Z"/></svg>
+      </a>
+      <a href="https://github.com/nibab" target="_blank" rel="noopener" aria-label="GitHub">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0C5.37 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.6.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.838 1.237 1.838 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.323 3.301 1.23A11.5 11.5 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.553 3.297-1.23 3.297-1.23.653 1.653.242 2.873.119 3.176.77.84 1.235 1.91 1.235 3.221 0 4.609-2.807 5.624-5.48 5.921.431.372.815 1.102.815 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.299 24 12c0-6.627-5.373-12-12-12Z"/></svg>
+      </a>
+      <a href="https://linkedin.com/in/cezarbabin" target="_blank" rel="noopener" aria-label="LinkedIn">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.063 2.063 0 1 1 2.063 2.065Zm1.782 13.019H3.555V9h3.564v11.452ZM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003Z"/></svg>
+      </a>
+    </div>
+    <small>© Cezar Babin</small>
+  </footer>
+  <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+  <script>
+    (function () {
+      document.addEventListener('click', function (e) {
+        var a = e.target.closest && e.target.closest('a');
+        if (!a || !a.hostname || a.hostname === location.hostname) return;
+        var fn = window.va || function () { (window.vaq = window.vaq || []).push(['event', arguments[0]]); };
+        fn({ name: 'outbound_click', data: { href: a.href, host: a.hostname } });
+      }, true);
+    })();
+  </script>
+  <script defer src="/_vercel/insights/script.js"></script>
+</body>
+</html>
