@@ -98,13 +98,17 @@
     <small>© Cezar Babin</small>
   </footer>
   <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+  <!-- Vercel Web Analytics: Initialize analytics queue before loading the script -->
+  <script>
+    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+  </script>
+  <!-- Custom outbound click tracking -->
   <script>
     (function () {
       document.addEventListener('click', function (e) {
         var a = e.target.closest && e.target.closest('a');
         if (!a || !a.hostname || a.hostname === location.hostname) return;
-        var fn = window.va || function () { (window.vaq = window.vaq || []).push(['event', arguments[0]]); };
-        fn({ name: 'outbound_click', data: { href: a.href, host: a.hostname } });
+        window.va('event', { name: 'outbound_click', data: { href: a.href, host: a.hostname } });
       }, true);
     })();
   </script>
