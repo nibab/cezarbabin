@@ -3,15 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Projects — Cezar Babin</title>
+<title>Discovery vs Tokenmaxxing — Cezar Babin</title>
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300..700&display=swap" rel="stylesheet" type="text/css">
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="../style.css">
 </head>
 <body>
   <div class="site">
     <header class="site-header">
       <h1>
-        <a href="index.html">
+        <a href="../index.html">
 <pre class="ascii-banner" aria-hidden="true">                          _           _     _
   ___ ___ ______ _ _ __  | |__   __ _| |__ (_)_ __
  / __/ _ \_  / _` | '__| | '_ \ / _` | '_ \| | '_ \
@@ -21,57 +21,35 @@
         </a>
       </h1>
       <nav class="site-nav">
-        <a href="about.html">About</a>
-        <a href="index.html">Essays</a>
-        <a href="notes.html">Notes</a>
-        <a href="projects.html" class="active">Projects</a>
+        <a href="../about.html">About</a>
+        <a href="../index.html">Essays</a>
+        <a href="../notes.html" class="active">Notes</a>
+        <a href="../projects.html">Projects</a>
       </nav>
     </header>
   </div>
   <hr class="divider">
 
   <div class="site">
-    <main class="content">
-      <ul class="post-list">
+    <main class="content post">
+      <h1>Discovery vs Tokenmaxxing</h1>
+      <p class="meta">2026-05-28 · Note</p>
 
-        <li>
-          <h2><a href="https://usefolio.ai" target="_blank" rel="noopener">folio</a></h2>
-          <p class="meta">2026</p>
-          <p class="excerpt">
-            folio is an experiment to validate whether knowledge workers who
-            are unfamiliar with the terminal (and by extension don't feel at
-            home in Codex) will feel more comfortable working with agents in
-            a more human-friendly UX. Agents are still first-class citizens,
-            but their work is far more visible, auditable, and explainable.
-          </p>
-          <p class="excerpt">
-            folio helps users analyze unstructured data en masse (documents,
-            text, images, audio) with a focus on finance, legal, marketing,
-            compliance, and customer service teams. It runs locally as a Mac
-            app, so users can experiment with sensitive data without it ever
-            leaving their machine.
-          </p>
-          <p class="excerpt">
-            I also use folio personally: to keep up to date with agents,
-            develop skills and harnesses, build videos and graphical assets
-            in code (with <a href="https://www.remotion.dev" target="_blank" rel="noopener">Remotion</a>),
-            and automate marketing and sales outbound.
-          </p>
+      <p>Most current AI coding tools are steering users into tokenmaxxing and re-generating software from scratch, in complete ignorance of the vast amounts of publicly available, human-validated software that can be combined and modded in powerful ways to address 99% of use cases.</p>
 
-          <a class="repo-embed" href="https://github.com/usefolio/folio" target="_blank" rel="noopener">
-            <img class="og"
-                 src="https://opengraph.githubassets.com/1/usefolio/folio"
-                 alt="usefolio/folio on GitHub"
-                 loading="lazy">
-            <div class="footer">
-              <svg class="gh-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0C5.37 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.6.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.838 1.237 1.838 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.323 3.301 1.23A11.5 11.5 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.553 3.297-1.23 3.297-1.23.653 1.653.242 2.873.119 3.176.77.84 1.235 1.91 1.235 3.221 0 4.609-2.807 5.624-5.48 5.921.431.372.815 1.102.815 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.299 24 12c0-6.627-5.373-12-12-12Z"/></svg>
-              <span class="domain">github.com</span>
-              <span class="name">usefolio/folio</span>
-            </div>
-          </a>
-        </li>
+      <p>Yes, AI tokens are relatively cheap, but it's still cheaper to split the cost amongst many. More importantly, saving up mental cycles on what makes your solution truly unique has significantly higher ROI. You built your own CRM? Great. So can everyone else. Maybe you should focus on proprietary mechanisms for sourcing instead.</p>
 
-      </ul>
+      <p>Part of the problem is perception. AI has muddied the waters for what is considered reasonable to build in-house. Most sensible people will agree that building infrastructure primitives is a waste of time. Need a custom UI component for reporting? Vibecode it. Everything else that falls somewhere in the middle of the spectrum? Less clear cut. More often than not, builders fall into the trap of false feasibility assumptions and decide to build it, blind to the number of edge-cases that make validation, maintenance and extensibility too big of a burden.</p>
+
+      <p>The other problem is customization. This is the now well-known problem with no-code software, opinionated frameworks and platforms like force.com. Everything is easy until it isn't. The effort spent on the last 10% dominates the costs of a project to an extent that initial savings become irrelevant.</p>
+
+      <p>There is also a third problem that gets little mention in this discourse: discoverability. Forget about SDKs and libraries, navigating the swath of publicly available software is impossibly difficult. Most users are simply unaware of the building blocks that could make their own implementation easier, which also makes it difficult to assess the marginal utility of requirements that require customization.</p>
+
+      <p>The abundance of AI-generated code is going to further exacerbate the discoverability problem. Yet even if we solve it, there is a much bigger problem waiting around the corner. How do we reward software creators, whether it's agents or humans? A system that doesn't reward visibility will naturally gravitate towards opaqueness. This feels like a fork in the road with a one way door that will have profound implications on the software industrial complex.</p>
+
+      <p>So how do we navigate this new world? We have a huge wave of token spend allocated towards sloppy, ephemeral software without clear ROI. At the same time we have a discoverability problem that is making it less and less possible for builders to collaborate on common, curated building blocks that stand the test of time and increase productivity.</p>
+
+      <p class="post-nav">← <a href="../notes.html">All notes</a></p>
     </main>
   </div>
 
@@ -94,7 +72,7 @@
   <script>
     window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
   </script>
-  <!-- Custom event tracking: outbound clicks + article views -->
+  <!-- Custom event tracking: outbound clicks + article/note views -->
   <script>
     (function () {
       document.addEventListener('click', function (e) {

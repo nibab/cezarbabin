@@ -50,7 +50,7 @@
           <h2><a href="essays/test-post.html">Test post: images, videos, lists, code, widgets</a></h2>
           <p class="meta">2026 · Internal test · localhost only</p>
           <p class="excerpt">
-            Smoke test for the rendering primitives — inline images with optional captions, 16:9 YouTube embeds, ordered/unordered/nested bullet lists, inline + block code, and inline JS widgets. This entry is hidden on any non-local hostname.
+            Smoke test for the rendering primitives — inline images with optional captions, 16:9 YouTube embeds, ordered/unordered/nested bullet lists, inline + block code, and inline JS widgets. This entry is hidden on any non-local hostname. <a href="essays/test-post.html">…</a>
           </p>
         </li>
 
@@ -58,7 +58,7 @@
           <h2><a href="essays/open-source-will-eat-vertical-ai.html">Open Source Will Eat Vertical AI</a></h2>
           <p class="meta">2026</p>
           <p class="excerpt">
-            Every few weeks, another vertical AI startup announces a new mega-round: "$100M to transform [industry] with AI". The speed at which these startups race through funding rounds, and the sheer scale, is dizzying. Beneath it all sits a question few seem to ask: what is this money actually buying?
+            Every few weeks, another vertical AI startup announces a new mega-round: "$100M to transform [industry] with AI". The speed at which these startups race through funding rounds, and the sheer scale, is dizzying. Beneath it all sits a question few seem to ask: what is this money actually buying? <a href="essays/open-source-will-eat-vertical-ai.html">…</a>
           </p>
         </li>
 
@@ -66,7 +66,7 @@
           <h2><a href="essays/chatgpt-is-the-new-browser.html">ChatGPT is the new browser and memory is the new cookie</a></h2>
           <p class="meta">2025</p>
           <p class="excerpt">
-            OpenAI launched an Apps SDK. Developers can now build apps inside ChatGPT. In the same way that cookies allowed Google to become a default transaction layer for the internet, memory helps OpenAI own the personalization layer.
+            OpenAI launched an Apps SDK. Developers can now build apps inside ChatGPT. In the same way that cookies allowed Google to become a default transaction layer for the internet, memory helps OpenAI own the personalization layer. <a href="essays/chatgpt-is-the-new-browser.html">…</a>
           </p>
         </li>
 
@@ -74,7 +74,7 @@
           <h2><a href="essays/search-not-ai-is-still-king.html">Search, not AI, is still king</a></h2>
           <p class="meta">2025</p>
           <p class="excerpt">
-            Search, not AI, is still the foundation of knowledge work. The Google search box was not just a necessary precursor to Artificial Intelligence — good search already looks a lot like it.
+            Search, not AI, is still the foundation of knowledge work. The Google search box was not just a necessary precursor to Artificial Intelligence — good search already looks a lot like it. <a href="essays/search-not-ai-is-still-king.html">…</a>
           </p>
         </li>
 
@@ -82,7 +82,7 @@
           <h2><a href="essays/innovation-and-survival.html">Innovation and survival</a></h2>
           <p class="meta">2018</p>
           <p class="excerpt">
-            These days innovation is commonly thought of as the job of small Silicon Valley startups. Yet real veterans of the craft, like Amazon, prove that innovation has nothing to do with being lean or small or iteration.
+            These days innovation is commonly thought of as the job of small Silicon Valley startups. Yet real veterans of the craft, like Amazon, prove that innovation has nothing to do with being lean or small or iteration. <a href="essays/innovation-and-survival.html">…</a>
           </p>
         </li>
 
@@ -123,11 +123,14 @@
     // the dashboard shows 'Top Articles' with human-readable names alongside
     // the default URL-based "Top Pages" view.
     (function () {
-      var m = location.pathname.match(/^\/essays\/(.+?)\.html$/);
+      var path = location.pathname;
+      var em = path.match(/^\/essays\/(.+?)\.html$/);
+      var nm = path.match(/^\/notes\/(.+?)\.html$/);
+      var m = em || nm;
       if (!m) return;
       var titleEl = document.querySelector('.post h1');
       var title = (titleEl && titleEl.textContent.trim()) || document.title.replace(/ — .*$/, '');
-      window.va('event', { name: 'article_view', data: { slug: m[1], title: title } });
+      window.va('event', { name: em ? 'article_view' : 'note_view', data: { slug: m[1], title: title } });
     })();
   </script>
   <script defer src="/_vercel/insights/script.js"></script>

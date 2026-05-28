@@ -31,10 +31,25 @@
   <hr class="divider">
 
   <div class="site">
-    <main class="content prose">
-      <p>
+    <main class="content">
+      <p style="font-size:14px; color:#5d5d5d; margin:0 0 28px; line-height:1.7;">
         Raw, unfinished ideas that may one day become essays.
       </p>
+      <ul class="post-list">
+
+        <li>
+          <h2><a href="notes/discovery-vs-tokenmaxxing.html">Discovery vs Tokenmaxxing</a></h2>
+          <p class="meta">2026-05-28</p>
+          <p class="excerpt">
+            Most current AI coding tools are steering users into tokenmaxxing
+            and re-generating software from scratch, in complete ignorance of
+            the vast amounts of publicly available, human-validated software
+            that can be combined and modded in powerful ways to address 99%
+            of use cases. <a href="notes/discovery-vs-tokenmaxxing.html">…</a>
+          </p>
+        </li>
+
+      </ul>
     </main>
   </div>
 
@@ -67,11 +82,14 @@
       }, true);
     })();
     (function () {
-      var m = location.pathname.match(/^\/essays\/(.+?)\.html$/);
+      var path = location.pathname;
+      var em = path.match(/^\/essays\/(.+?)\.html$/);
+      var nm = path.match(/^\/notes\/(.+?)\.html$/);
+      var m = em || nm;
       if (!m) return;
       var titleEl = document.querySelector('.post h1');
       var title = (titleEl && titleEl.textContent.trim()) || document.title.replace(/ — .*$/, '');
-      window.va('event', { name: 'article_view', data: { slug: m[1], title: title } });
+      window.va('event', { name: em ? 'article_view' : 'note_view', data: { slug: m[1], title: title } });
     })();
   </script>
   <script defer src="/_vercel/insights/script.js"></script>

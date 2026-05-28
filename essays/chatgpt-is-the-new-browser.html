@@ -107,11 +107,14 @@
       }, true);
     })();
     (function () {
-      var m = location.pathname.match(/^\/essays\/(.+?)\.html$/);
+      var path = location.pathname;
+      var em = path.match(/^\/essays\/(.+?)\.html$/);
+      var nm = path.match(/^\/notes\/(.+?)\.html$/);
+      var m = em || nm;
       if (!m) return;
       var titleEl = document.querySelector('.post h1');
       var title = (titleEl && titleEl.textContent.trim()) || document.title.replace(/ — .*$/, '');
-      window.va('event', { name: 'article_view', data: { slug: m[1], title: title } });
+      window.va('event', { name: em ? 'article_view' : 'note_view', data: { slug: m[1], title: title } });
     })();
   </script>
   <script defer src="/_vercel/insights/script.js"></script>
