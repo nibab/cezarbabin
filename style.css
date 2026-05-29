@@ -399,6 +399,22 @@ a:hover {
 }
 .project-title a:hover { opacity: 0.85; }
 
+/* ---------- Two-up embed row (e.g. website + GitHub side by side) ---- */
+.embed-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin: 14px 0 22px;
+}
+.embed-row .repo-embed { margin: 0; }
+.embed-row .repo-embed .og {
+  aspect-ratio: 2 / 1;
+  object-fit: cover;
+}
+@media (max-width: 500px) {
+  .embed-row { grid-template-columns: 1fr; }
+}
+
 /* ---------- Reddit-style GitHub link preview ------------------------- */
 /* OG image at the top (the same social-preview image Reddit/Twitter etc.
    pull for any GitHub repo link), domain row at the bottom. Whole card is
