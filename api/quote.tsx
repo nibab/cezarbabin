@@ -100,32 +100,42 @@ export default async function handler(req: Request) {
           }}
         />
 
-        {/* Quote — vertically centered in the remaining space */}
+        {/* Highlighted quote — wrapped in a soft yellow "marker stroke"
+            block so the card reads like a screenshot of a highlighted
+            passage. Padding gives the text room inside the highlight. */}
         <div
           style={{
             display: "flex",
             flex: 1,
             flexDirection: "column",
             justifyContent: "center",
-            paddingTop: 30,
-            paddingBottom: 30,
+            paddingTop: 36,
+            paddingBottom: 36,
           }}
         >
           <div
             style={{
-              fontSize,
-              fontWeight: 400,
-              lineHeight: 1.45,
-              color: "#000000",
-              letterSpacing: -0.2,
-              // Soft cap on lines so long passages don't overflow the card
-              display: "-webkit-box",
-              WebkitLineClamp: 18,
-              WebkitBoxOrient: "vertical",
-              overflow: "hidden",
+              display: "flex",
+              backgroundColor: "#FEF08A",
+              padding: "36px 42px",
+              borderRadius: 4,
             }}
           >
-            {text}
+            <div
+              style={{
+                fontSize,
+                fontWeight: 400,
+                lineHeight: 1.45,
+                color: "#000000",
+                letterSpacing: -0.2,
+                display: "-webkit-box",
+                WebkitLineClamp: 18,
+                WebkitBoxOrient: "vertical",
+                overflow: "hidden",
+              }}
+            >
+              {text}
+            </div>
           </div>
         </div>
 
