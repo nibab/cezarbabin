@@ -72,10 +72,8 @@ export default async function handler(req: Request) {
 
   // Optional analytics injected by inject_og.py from metadata.json.
   const readtime = url.searchParams.get("readtime") || "";
-  // Article path (e.g. "/essays/open-source-will-eat-vertical-ai.html").
-  // Rendered as cezarbabin.com<path> at the top.
-  const path = url.searchParams.get("path") || "";
-  const displayUrl = path ? `cezarbabin.com${path}` : "cezarbabin.com";
+  // Top-left of the card always shows just the bare domain.
+  const displayUrl = "cezarbabin.com";
 
   const [regular, semibold] = await Promise.all([
     loadGoogleFont("Open Sans", 400),
@@ -90,39 +88,70 @@ export default async function handler(req: Request) {
           height: "100%",
           display: "flex",
           flexDirection: "column",
-          justifyContent: "space-between",
           backgroundColor: "#ffffff",
           padding: "60px 72px",
           fontFamily: '"Open Sans"',
           color: "#000000",
         }}
       >
-        {/* Top: the full article URL (replaces the wordmark) */}
+        {/* Top row: URL on the left, read-time + Essay/Note tag on the right */}
         <div
           style={{
             display: "flex",
-            fontSize: displayUrl.length > 48 ? 22 : 26,
-            fontWeight: 600,
-            color: "#2d993e",
-            letterSpacing: -0.3,
-            // Single line; truncate ellipsis if absurdly long
-            whiteSpace: "nowrap",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            maxWidth: "100%",
+            justifyContent: "space-between",
+            alignItems: "center",
+            gap: 20,
           }}
         >
-          {displayUrl}
+          <div
+            style={{
+              display: "flex",
+              fontSize: 26,
+              fontWeight: 600,
+              color: "#2d993e",
+              letterSpacing: -0.3,
+            }}
+          >
+            {displayUrl}
+          </div>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 14,
+              color: "#5d5d5d",
+              fontSize: 22,
+              flexShrink: 0,
+            }}
+          >
+            {readtime && (
+              <div style={{ display: "flex" }}>{readtime} min read</div>
+            )}
+            {subtitle && (
+              <div style={{ display: "flex", opacity: 0.7 }}>· {subtitle}</div>
+            )}
+          </div>
         </div>
 
-        {/* Middle: title + excerpt */}
+        {/* Divider under the top row */}
+        <div
+          style={{
+            width: "100%",
+            height: 1,
+            backgroundColor: "rgba(89, 104, 93, 0.22)",
+            display: "flex",
+            marginTop: 20,
+            marginBottom: 56,
+          }}
+        />
+
+        {/* Title + excerpt fill the rest of the card */}
         <div
           style={{
             display: "flex",
             flexDirection: "column",
             gap: 24,
-            marginTop: 12,
-            marginBottom: 12,
+            flexShrink: 1,
           }}
         >
           <div
@@ -132,7 +161,6 @@ export default async function handler(req: Request) {
               lineHeight: 1.12,
               letterSpacing: -1.5,
               color: "#000000",
-              // Hard-cap to 3 lines so the card always lays out the same
               display: "-webkit-box",
               WebkitLineClamp: 3,
               WebkitBoxOrient: "vertical",
@@ -148,7 +176,7 @@ export default async function handler(req: Request) {
                 lineHeight: 1.5,
                 color: "#5d5d5d",
                 display: "-webkit-box",
-                WebkitLineClamp: 3,
+                WebkitLineClamp: 4,
                 WebkitBoxOrient: "vertical",
                 overflow: "hidden",
               }}
@@ -156,34 +184,6 @@ export default async function handler(req: Request) {
               {excerpt}
             </div>
           )}
-        </div>
-
-        {/* Bottom: hairline divider + meta row (time + tag) */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-          <div
-            style={{
-              width: "100%",
-              height: 1,
-              backgroundColor: "rgba(89, 104, 93, 0.22)",
-              display: "flex",
-            }}
-          />
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 14,
-              color: "#5d5d5d",
-              fontSize: 22,
-            }}
-          >
-            {readtime && (
-              <div style={{ display: "flex" }}>{readtime} min read</div>
-            )}
-            {subtitle && (
-              <div style={{ display: "flex", opacity: 0.7 }}>· {subtitle}</div>
-            )}
-          </div>
         </div>
       </div>
     ),
