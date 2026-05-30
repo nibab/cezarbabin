@@ -14,17 +14,37 @@ export const config = {
   runtime: "edge",
 };
 
-// Fonts: fetched once, cached by the Edge runtime across invocations.
-// Picked the jsDelivr google/fonts mirror because it's stable and CORS-friendly.
-const OPEN_SANS_REGULAR =
-  "https://cdn.jsdelivr.net/gh/google/fonts/apache/opensans/static/OpenSans-Regular.ttf";
-const OPEN_SANS_SEMIBOLD =
-  "https://cdn.jsdelivr.net/gh/google/fonts/apache/opensans/static/OpenSans-SemiBold.ttf";
-
-async function loadFont(url: string): Promise<ArrayBuffer> {
-  const r = await fetch(url);
-  if (!r.ok) throw new Error(`font fetch failed ${r.status} ${url}`);
-  return r.arrayBuffer();
+// Fonts: resolved via Google Fonts' CSS API so we get whichever .ttf URL is
+// currently published (the gstatic version number rotates a few times a year).
+// The desktop UA header is what forces TTF; without it Google serves WOFF2,
+// which Satori can't ingest.
+async function loadGoogleFontTTF(
+  family: string,
+  weight: number
+): Promise<ArrayBuffer> {
+  const cssUrl = `https://fonts.googleapis.com/css2?family=${family.replace(
+    / /g,
+    "+"
+  )}:wght@${weight}`;
+  const cssResp = await fetch(cssUrl, {
+    headers: {
+      "User-Agent":
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
+    },
+  });
+  if (!cssResp.ok) {
+    throw new Error(`CSS fetch failed ${cssResp.status} for ${cssUrl}`);
+  }
+  const css = await cssResp.text();
+  const m = css.match(/url\((https:\/\/fonts\.gstatic\.com\/[^)]+\.ttf)\)/);
+  if (!m) {
+    throw new Error(`no .ttf URL found in CSS for ${family} ${weight}`);
+  }
+  const ttfResp = await fetch(m[1]);
+  if (!ttfResp.ok) {
+    throw new Error(`font fetch failed ${ttfResp.status} ${m[1]}`);
+  }
+  return ttfResp.arrayBuffer();
 }
 
 function trimTo(s: string, max: number): string {
@@ -45,8 +65,8 @@ export default async function handler(req: Request) {
   const subtitle = (url.searchParams.get("subtitle") || "").slice(0, 40);
 
   const [regular, semibold] = await Promise.all([
-    loadFont(OPEN_SANS_REGULAR),
-    loadFont(OPEN_SANS_SEMIBOLD),
+    loadGoogleFontTTF("Open Sans", 400),
+    loadGoogleFontTTF("Open Sans", 600),
   ]);
 
   return new ImageResponse(
