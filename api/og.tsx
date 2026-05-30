@@ -72,6 +72,10 @@ export default async function handler(req: Request) {
 
   // Optional analytics injected by inject_og.py from metadata.json.
   const readtime = url.searchParams.get("readtime") || "";
+  // Article path (e.g. "/essays/open-source-will-eat-vertical-ai.html").
+  // Rendered as cezarbabin.com<path> at the top.
+  const path = url.searchParams.get("path") || "";
+  const displayUrl = path ? `cezarbabin.com${path}` : "cezarbabin.com";
 
   const [regular, semibold] = await Promise.all([
     loadGoogleFont("Open Sans", 400),
@@ -93,17 +97,22 @@ export default async function handler(req: Request) {
           color: "#000000",
         }}
       >
-        {/* Top: site mark */}
+        {/* Top: the full article URL (replaces the wordmark) */}
         <div
           style={{
             display: "flex",
-            fontSize: 28,
-            fontWeight: 400,
-            color: "#5d5d5d",
-            letterSpacing: -0.5,
+            fontSize: displayUrl.length > 48 ? 22 : 26,
+            fontWeight: 600,
+            color: "#2d993e",
+            letterSpacing: -0.3,
+            // Single line; truncate ellipsis if absurdly long
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            maxWidth: "100%",
           }}
         >
-          cezar babin
+          {displayUrl}
         </div>
 
         {/* Middle: title + excerpt */}
@@ -149,7 +158,7 @@ export default async function handler(req: Request) {
           )}
         </div>
 
-        {/* Bottom: hairline divider + footer row */}
+        {/* Bottom: hairline divider + meta row (time + tag) */}
         <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
           <div
             style={{
@@ -162,29 +171,18 @@ export default async function handler(req: Request) {
           <div
             style={{
               display: "flex",
-              justifyContent: "space-between",
               alignItems: "center",
+              gap: 14,
+              color: "#5d5d5d",
               fontSize: 22,
             }}
           >
-            <div style={{ display: "flex", color: "#2d993e", fontWeight: 600 }}>
-              cezarbabin.com
-            </div>
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 14,
-                color: "#5d5d5d",
-              }}
-            >
-              {readtime && (
-                <div style={{ display: "flex" }}>{readtime} min read</div>
-              )}
-              {subtitle && (
-                <div style={{ display: "flex", opacity: 0.7 }}>· {subtitle}</div>
-              )}
-            </div>
+            {readtime && (
+              <div style={{ display: "flex" }}>{readtime} min read</div>
+            )}
+            {subtitle && (
+              <div style={{ display: "flex", opacity: 0.7 }}>· {subtitle}</div>
+            )}
           </div>
         </div>
       </div>

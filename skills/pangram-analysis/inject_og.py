@@ -90,12 +90,14 @@ def og_image_url(
     title: str,
     excerpt: str,
     subtitle: str,
+    path: str,
     readtime: int | None = None,
 ) -> str:
     parts = [
         f"title={quote(title, safe='')}",
         f"excerpt={quote(excerpt, safe='')}",
         f"subtitle={quote(subtitle, safe='')}",
+        f"path={quote(path, safe='/')}",
     ]
     if readtime is not None:
         parts.append(f"readtime={readtime}")
@@ -168,7 +170,8 @@ def process(path: Path, blog_root: Path, metadata: dict) -> bool:
     subtitle = article_subtitle(rel)
     url = article_url(rel)
     rt = article_readtime(metadata.get(str(rel)))
-    image = og_image_url(title, excerpt, subtitle, rt)
+    path = "/" + rel.as_posix()
+    image = og_image_url(title, excerpt, subtitle, path, rt)
     block = build_meta_block(title, excerpt, url, image)
     new_html = inject_into_head(html, block)
     if new_html != html:
