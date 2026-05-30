@@ -79,3 +79,66 @@ Change either at the top of `analyze.py`.
 
 `essays/test-post.html` is skipped automatically (it's local-only and
 doesn't represent real content).
+
+---
+
+# Social-share meta tags (`inject_og.py`)
+
+Companion script in this same skill directory.
+
+## What it does
+
+Injects Open Graph + Twitter Card `<meta>` tags into each essay/note `<head>`
+so X, LinkedIn, Facebook, Slack, Discord, iMessage etc. all render a custom
+share preview with the article's title + first sentence.
+
+The `og:image` URL points at `/api/og?title=…&excerpt=…&subtitle=…` — a Vercel
+Edge function (`api/og.tsx`) that renders a 1200×630 PNG matching the site
+theme (Open Sans, green Pentalist accent).
+
+## When to invoke
+
+Whenever the OG injection is stale, which means:
+
+- **A new essay or note is added.** Run it once on the new file.
+- **The title or first paragraph of an existing article changes substantively.**
+  Re-run on that file so the share card text updates.
+
+Cheap: no API calls, just file I/O. Safe to re-run anytime.
+
+## How to invoke
+
+```sh
+# All essays + notes
+python skills/pangram-analysis/inject_og.py
+
+# Specific files
+python skills/pangram-analysis/inject_og.py essays/foo.html notes/bar.html
+```
+
+## What it edits
+
+Each article's `<head>` gets an idempotent block wrapped in
+`<!-- og:auto-start --> … <!-- og:auto-end -->`. Re-runs strip the prior
+block before writing a fresh one — no piling up.
+
+Tags emitted: `og:type`, `og:site_name`, `og:title`, `og:description`,
+`og:url`, `og:image` (+ width/height), and the Twitter Card mirrors
+(`twitter:card=summary_large_image`, `twitter:site=@sygmo1d`, etc.).
+
+## How the image gets rendered
+
+`api/og.tsx` is a Vercel Edge function using `@vercel/og`. It pulls Open Sans
+from the jsDelivr Google Fonts mirror (cached at the edge after first call),
+renders a 1200×630 PNG, and caches the result for 24h. Vercel auto-detects
+this file as an Edge function via the `package.json` dependency.
+
+## Validating after a deploy
+
+- Twitter Card Validator: https://cards-dev.twitter.com/validator
+- Facebook Sharing Debugger: https://developers.facebook.com/tools/debug/
+  (use "Scrape Again" to bypass FB's cache)
+- Universal preview: https://www.opengraph.xyz/url/...
+
+If a card already cached on a platform looks wrong after an edit, append
+`?v=2` to the article URL or use the platform's force-refresh tool.
