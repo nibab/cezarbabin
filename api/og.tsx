@@ -96,7 +96,6 @@ export default async function handler(req: Request) {
               color: "#000000",
               // Hard-cap to 3 lines so the card always lays out the same
               display: "-webkit-box",
-              // @ts-expect-error — Satori accepts these legacy CSS properties
               WebkitLineClamp: 3,
               WebkitBoxOrient: "vertical",
               overflow: "hidden",
@@ -111,7 +110,6 @@ export default async function handler(req: Request) {
                 lineHeight: 1.5,
                 color: "#5d5d5d",
                 display: "-webkit-box",
-                // @ts-expect-error — Satori CSS
                 WebkitLineClamp: 3,
                 WebkitBoxOrient: "vertical",
                 overflow: "hidden",
