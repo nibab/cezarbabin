@@ -46,6 +46,7 @@ SITE = "https://cezarbabin.com"
 # Logical (CSS) pixel viewport presets. Output PNG dimensions are these
 # multiplied by --dpi.
 VIEWPORTS: dict[str, tuple[int, int]] = {
+    "compact":        (430, 640),   # default — focused crop around the highlight
     "iphone15pro":    (393, 852),
     "iphone15promax": (430, 932),
     "iphone14":       (390, 844),
@@ -130,7 +131,7 @@ def main() -> None:
     ap.add_argument("--text", required=True, help="substring to highlight")
     ap.add_argument("--out", type=Path, required=True, help="output PNG path")
     ap.add_argument(
-        "--viewport", default="iphone15pro", choices=list(VIEWPORTS), help="phone preset"
+        "--viewport", default="compact", choices=list(VIEWPORTS), help="phone preset"
     )
     ap.add_argument(
         "--dpi", type=int, default=2, choices=[1, 2, 3], help="device scale factor"
