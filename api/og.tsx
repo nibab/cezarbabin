@@ -14,11 +14,10 @@ export const config = {
   runtime: "edge",
 };
 
-// Fonts: resolved via Google Fonts' CSS API so we get whichever .ttf URL is
-// currently published (the gstatic version number rotates a few times a year).
-// The desktop UA header is what forces TTF; without it Google serves WOFF2,
-// which Satori can't ingest.
-async function loadGoogleFontTTF(
+// Fonts: resolved via Google Fonts' CSS API so we get whichever URL is
+// currently published (gstatic version numbers rotate a few times a year).
+// We accept WOFF2 / WOFF / TTF — @vercel/og (Satori) handles all three.
+async function loadGoogleFont(
   family: string,
   weight: number
 ): Promise<ArrayBuffer> {
@@ -36,15 +35,22 @@ async function loadGoogleFontTTF(
     throw new Error(`CSS fetch failed ${cssResp.status} for ${cssUrl}`);
   }
   const css = await cssResp.text();
-  const m = css.match(/url\((https:\/\/fonts\.gstatic\.com\/[^)]+\.ttf)\)/);
+  const m = css.match(
+    /url\((https:\/\/fonts\.gstatic\.com\/[^)]+\.(?:woff2|woff|ttf|otf))\)/i
+  );
   if (!m) {
-    throw new Error(`no .ttf URL found in CSS for ${family} ${weight}`);
+    throw new Error(
+      `no font URL in CSS for ${family} ${weight} — first 200 chars: ${css.slice(
+        0,
+        200
+      )}`
+    );
   }
-  const ttfResp = await fetch(m[1]);
-  if (!ttfResp.ok) {
-    throw new Error(`font fetch failed ${ttfResp.status} ${m[1]}`);
+  const fontResp = await fetch(m[1]);
+  if (!fontResp.ok) {
+    throw new Error(`font fetch failed ${fontResp.status} ${m[1]}`);
   }
-  return ttfResp.arrayBuffer();
+  return fontResp.arrayBuffer();
 }
 
 function trimTo(s: string, max: number): string {
@@ -65,8 +71,8 @@ export default async function handler(req: Request) {
   const subtitle = (url.searchParams.get("subtitle") || "").slice(0, 40);
 
   const [regular, semibold] = await Promise.all([
-    loadGoogleFontTTF("Open Sans", 400),
-    loadGoogleFontTTF("Open Sans", 600),
+    loadGoogleFont("Open Sans", 400),
+    loadGoogleFont("Open Sans", 600),
   ]);
 
   return new ImageResponse(
