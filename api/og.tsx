@@ -71,18 +71,7 @@ export default async function handler(req: Request) {
   const subtitle = (url.searchParams.get("subtitle") || "").slice(0, 40);
 
   // Optional analytics injected by inject_og.py from metadata.json.
-  // readtime is an integer string ("9"); human/ai are 0–100 ints as strings.
   const readtime = url.searchParams.get("readtime") || "";
-  const humanRaw = url.searchParams.get("human");
-  const aiRaw = url.searchParams.get("ai");
-  const human =
-    humanRaw !== null && /^\d+$/.test(humanRaw)
-      ? Math.max(0, Math.min(100, parseInt(humanRaw, 10)))
-      : null;
-  const ai =
-    aiRaw !== null && /^\d+$/.test(aiRaw)
-      ? Math.max(0, Math.min(100, parseInt(aiRaw, 10)))
-      : null;
 
   const [regular, semibold] = await Promise.all([
     loadGoogleFont("Open Sans", 400),
@@ -192,34 +181,6 @@ export default async function handler(req: Request) {
               {readtime && (
                 <div style={{ display: "flex" }}>{readtime} min read</div>
               )}
-
-              {human !== null && (
-                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                  {/* AI / human meter — green pill fills proportional to human %.
-                      The gray track represents the AI/AI-assisted remainder. */}
-                  <div
-                    style={{
-                      display: "flex",
-                      width: 110,
-                      height: 8,
-                      borderRadius: 999,
-                      backgroundColor: "rgba(89, 104, 93, 0.22)",
-                      overflow: "hidden",
-                    }}
-                  >
-                    <div
-                      style={{
-                        display: "flex",
-                        width: `${human}%`,
-                        height: "100%",
-                        backgroundColor: "#2d993e",
-                      }}
-                    />
-                  </div>
-                  <div style={{ display: "flex" }}>{human}% human</div>
-                </div>
-              )}
-
               {subtitle && (
                 <div style={{ display: "flex", opacity: 0.7 }}>· {subtitle}</div>
               )}

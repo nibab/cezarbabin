@@ -91,8 +91,6 @@ def og_image_url(
     excerpt: str,
     subtitle: str,
     readtime: int | None = None,
-    human: int | None = None,
-    ai: int | None = None,
 ) -> str:
     parts = [
         f"title={quote(title, safe='')}",
@@ -101,10 +99,6 @@ def og_image_url(
     ]
     if readtime is not None:
         parts.append(f"readtime={readtime}")
-    if human is not None:
-        parts.append(f"human={human}")
-    if ai is not None:
-        parts.append(f"ai={ai}")
     return f"{SITE}/api/og?{'&'.join(parts)}"
 
 
@@ -115,22 +109,10 @@ def load_metadata(blog_root: Path) -> dict:
     return json.loads(p.read_text())
 
 
-def article_stats(meta: dict | None) -> tuple[int | None, int | None, int | None]:
-    """Return (readtime_min, human_pct, ai_pct) from a metadata.json entry."""
+def article_readtime(meta: dict | None) -> int | None:
     if not meta:
-        return None, None, None
-    rt = meta.get("read_time_min")
-    pg = meta.get("pangram") or {}
-    h = None
-    a = None
-    if pg.get("fraction_human") is not None:
-        h = round(100 * pg["fraction_human"])
-    if pg.get("fraction_ai") is not None:
-        a = round(
-            100
-            * ((pg.get("fraction_ai") or 0) + (pg.get("fraction_ai_assisted") or 0))
-        )
-    return rt, h, a
+        return None
+    return meta.get("read_time_min")
 
 
 def build_meta_block(title: str, description: str, url: str, image: str) -> str:
@@ -185,13 +167,13 @@ def process(path: Path, blog_root: Path, metadata: dict) -> bool:
         return False
     subtitle = article_subtitle(rel)
     url = article_url(rel)
-    rt, h, a = article_stats(metadata.get(str(rel)))
-    image = og_image_url(title, excerpt, subtitle, rt, h, a)
+    rt = article_readtime(metadata.get(str(rel)))
+    image = og_image_url(title, excerpt, subtitle, rt)
     block = build_meta_block(title, excerpt, url, image)
     new_html = inject_into_head(html, block)
     if new_html != html:
         path.write_text(new_html)
-        print(f"INJECTED: {rel}  (rt={rt} h={h} a={a})")
+        print(f"INJECTED: {rel}  (rt={rt})")
         return True
     print(f"unchanged: {rel}")
     return False
