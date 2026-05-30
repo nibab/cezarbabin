@@ -18,6 +18,7 @@ This script does not call any API. It only reads/writes HTML on disk.
 
 from __future__ import annotations
 
+import json
 import os
 import re
 import sys
@@ -27,6 +28,7 @@ from urllib.parse import quote
 
 SITE = "https://cezarbabin.com"
 TWITTER_HANDLE = "@sygmo1d"
+METADATA_FILE = "metadata.json"
 
 START = "<!-- og:auto-start -->"
 END = "<!-- og:auto-end -->"
@@ -84,13 +86,51 @@ def article_url(rel: Path) -> str:
     return f"{SITE}/{rel.as_posix()}"
 
 
-def og_image_url(title: str, excerpt: str, subtitle: str) -> str:
-    qs = (
-        f"title={quote(title, safe='')}"
-        f"&excerpt={quote(excerpt, safe='')}"
-        f"&subtitle={quote(subtitle, safe='')}"
-    )
-    return f"{SITE}/api/og?{qs}"
+def og_image_url(
+    title: str,
+    excerpt: str,
+    subtitle: str,
+    readtime: int | None = None,
+    human: int | None = None,
+    ai: int | None = None,
+) -> str:
+    parts = [
+        f"title={quote(title, safe='')}",
+        f"excerpt={quote(excerpt, safe='')}",
+        f"subtitle={quote(subtitle, safe='')}",
+    ]
+    if readtime is not None:
+        parts.append(f"readtime={readtime}")
+    if human is not None:
+        parts.append(f"human={human}")
+    if ai is not None:
+        parts.append(f"ai={ai}")
+    return f"{SITE}/api/og?{'&'.join(parts)}"
+
+
+def load_metadata(blog_root: Path) -> dict:
+    p = blog_root / METADATA_FILE
+    if not p.exists():
+        return {}
+    return json.loads(p.read_text())
+
+
+def article_stats(meta: dict | None) -> tuple[int | None, int | None, int | None]:
+    """Return (readtime_min, human_pct, ai_pct) from a metadata.json entry."""
+    if not meta:
+        return None, None, None
+    rt = meta.get("read_time_min")
+    pg = meta.get("pangram") or {}
+    h = None
+    a = None
+    if pg.get("fraction_human") is not None:
+        h = round(100 * pg["fraction_human"])
+    if pg.get("fraction_ai") is not None:
+        a = round(
+            100
+            * ((pg.get("fraction_ai") or 0) + (pg.get("fraction_ai_assisted") or 0))
+        )
+    return rt, h, a
 
 
 def build_meta_block(title: str, description: str, url: str, image: str) -> str:
@@ -132,7 +172,7 @@ def inject_into_head(html: str, block: str) -> str:
     return HEAD_CLOSE_RE.sub(f"{block}\n</head>", stripped, count=1)
 
 
-def process(path: Path, blog_root: Path) -> bool:
+def process(path: Path, blog_root: Path, metadata: dict) -> bool:
     rel = path.relative_to(blog_root)
     if rel.name == "test-post.html":
         print(f"SKIP test fixture: {rel}")
@@ -145,12 +185,13 @@ def process(path: Path, blog_root: Path) -> bool:
         return False
     subtitle = article_subtitle(rel)
     url = article_url(rel)
-    image = og_image_url(title, excerpt, subtitle)
+    rt, h, a = article_stats(metadata.get(str(rel)))
+    image = og_image_url(title, excerpt, subtitle, rt, h, a)
     block = build_meta_block(title, excerpt, url, image)
     new_html = inject_into_head(html, block)
     if new_html != html:
         path.write_text(new_html)
-        print(f"INJECTED: {rel}")
+        print(f"INJECTED: {rel}  (rt={rt} h={h} a={a})")
         return True
     print(f"unchanged: {rel}")
     return False
@@ -168,6 +209,7 @@ def discover(blog_root: Path) -> list[Path]:
 def main() -> None:
     blog_root = find_blog_root()
     os.chdir(blog_root)
+    metadata = load_metadata(blog_root)
     args = sys.argv[1:]
     targets = (
         [Path(a).resolve() for a in args]
@@ -176,7 +218,7 @@ def main() -> None:
     )
     changed = 0
     for path in targets:
-        if process(path, blog_root):
+        if process(path, blog_root, metadata):
             changed += 1
     print(f"\n{changed} file(s) updated.")
 
