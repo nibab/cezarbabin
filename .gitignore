@@ -9,3 +9,6 @@ node_modules/
 .pangram_key
 *.local-secret
 metadata.local.json
+
+# Local-only screenshot outputs (Playwright skill)
+screenshots/
