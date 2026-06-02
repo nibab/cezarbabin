@@ -1,6 +1,6 @@
 {
   "essays/chatgpt-is-the-new-browser.html": {
-    "analyzed_at": "2026-05-29T19:08:32+00:00",
+    "analyzed_at": "2026-06-02T17:43:14+00:00",
     "pangram": {
       "fraction_ai": 0.0,
       "fraction_ai_assisted": 0.0,
@@ -13,7 +13,7 @@
     "words": 636
   },
   "essays/innovation-and-survival.html": {
-    "analyzed_at": "2026-05-29T19:08:36+00:00",
+    "analyzed_at": "2026-06-02T17:43:21+00:00",
     "pangram": {
       "fraction_ai": 0.0,
       "fraction_ai_assisted": 0.38781630992889404,
@@ -26,7 +26,7 @@
     "words": 836
   },
   "essays/open-source-will-eat-vertical-ai.html": {
-    "analyzed_at": "2026-05-29T19:08:41+00:00",
+    "analyzed_at": "2026-06-02T17:43:26+00:00",
     "pangram": {
       "fraction_ai": 0.6834862232208252,
       "fraction_ai_assisted": 0.1989876627922058,
@@ -39,7 +39,7 @@
     "words": 1957
   },
   "essays/search-not-ai-is-still-king.html": {
-    "analyzed_at": "2026-05-29T19:08:42+00:00",
+    "analyzed_at": "2026-06-02T17:43:27+00:00",
     "pangram": {
       "fraction_ai": 0.0,
       "fraction_ai_assisted": 0.0,
@@ -52,7 +52,7 @@
     "words": 362
   },
   "notes/designing-a-dictatorship.html": {
-    "analyzed_at": "2026-06-02T17:37:48+00:00",
+    "analyzed_at": "2026-06-02T17:43:29+00:00",
     "pangram": {
       "fraction_ai": 0.0,
       "fraction_ai_assisted": 0.0,
@@ -65,7 +65,7 @@
     "words": 660
   },
   "notes/discovery-vs-tokenmaxxing.html": {
-    "analyzed_at": "2026-05-29T19:08:44+00:00",
+    "analyzed_at": "2026-06-02T17:43:30+00:00",
     "pangram": {
       "fraction_ai": 0.0,
       "fraction_ai_assisted": 0.0,

@@ -159,22 +159,32 @@ def pangram_call(text: str, api_key: str, retries: int = 3) -> dict:
 
 # -------- HTML meta-line injection (idempotent) ----------------------------
 
-INJECT_RE = re.compile(r"\s*·\s*\d+\s*min\s*read[^<]*?(?=</p>|$)", re.IGNORECASE)
+INJECT_RE = re.compile(
+    r"\s*·\s*\d+\s*words[^<]*?(?=</p>|$)|\s*·\s*\d+\s*min\s*read[^<]*?(?=</p>|$)",
+    re.IGNORECASE,
+)
+METER_BLOCK_RE = re.compile(
+    r'\s*<div class="ai-meter">.*?</div>\s*(?=</?(?:p|h\d|main))',
+    re.DOTALL,
+)
 
 
 def inject_meta_line(
     html: str,
+    words: int,
     mins: int,
     human_pct: int | None = None,
     ai_pct: int | None = None,
 ) -> str:
     """
-    Add ` · N min read[ · H% human[ · A% AI]]` to the article's first
-    <p class="meta">…</p> after <h1>. Idempotent: any prior injection of this
-    same shape is stripped before the new value is appended. When Pangram data
-    isn't available (human_pct is None), only the reading-time segment lands.
+    Update the article's first <p class="meta"> to include
+    `· {words} words · {mins} min read[ · H% human[ · A% AI]]`. Idempotent —
+    re-runs strip prior injections of the same shape before appending.
+
+    Also strips any legacy <div class="ai-meter"> block left over from an
+    earlier version of this skill so re-runs clean up after themselves.
     """
-    tail = f"{mins} min read"
+    tail = f"{words} words · {mins} min read"
     if human_pct is not None:
         tail += f" · {human_pct}% human"
         if ai_pct is not None and ai_pct >= 5:
@@ -188,7 +198,10 @@ def inject_meta_line(
         return html
     existing = INJECT_RE.sub("", m.group(2)).rstrip()
     new_meta = f"{existing} · {tail}"
-    return html[: m.start(2)] + new_meta + html[m.end(2) :]
+    out = html[: m.start(2)] + new_meta + html[m.end(2) :]
+
+    # Clean up any legacy ai-meter divs from earlier skill iterations.
+    return METER_BLOCK_RE.sub("", out)
 
 
 # -------- listing-page meta update -----------------------------------------
@@ -391,7 +404,7 @@ def main() -> None:
                    + (pangram_data.get("fraction_ai_assisted") or 0))
             )
 
-        new_html = inject_meta_line(html, rm, h_pct, a_pct)
+        new_html = inject_meta_line(html, wc, rm, h_pct, a_pct)
         if new_html != html:
             full.write_text(new_html)
 
