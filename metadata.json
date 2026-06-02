@@ -51,6 +51,19 @@
     "skill_version": "1",
     "words": 362
   },
+  "notes/designing-a-dictatorship.html": {
+    "analyzed_at": "2026-06-02T17:37:48+00:00",
+    "pangram": {
+      "fraction_ai": 0.0,
+      "fraction_ai_assisted": 0.0,
+      "fraction_human": 1.0,
+      "headline": "Human Written",
+      "prediction_short": "Human"
+    },
+    "read_time_min": 3,
+    "skill_version": "1",
+    "words": 660
+  },
   "notes/discovery-vs-tokenmaxxing.html": {
     "analyzed_at": "2026-05-29T19:08:44+00:00",
     "pangram": {
