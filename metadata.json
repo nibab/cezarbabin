@@ -51,19 +51,6 @@
     "skill_version": "1",
     "words": 362
   },
-  "notes/the-hidden-social-aggression-of-ai-progress.html": {
-    "analyzed_at": "2026-06-10T20:41:57+00:00",
-    "pangram": {
-      "fraction_ai": 0.0,
-      "fraction_ai_assisted": 0.0,
-      "fraction_human": 1.0,
-      "headline": "Human Written",
-      "prediction_short": "Human"
-    },
-    "read_time_min": 2,
-    "skill_version": "1",
-    "words": 506
-  },
   "notes/designing-a-dictatorship.html": {
     "analyzed_at": "2026-06-02T17:43:29+00:00",
     "pangram": {
@@ -89,5 +76,18 @@
     "read_time_min": 2,
     "skill_version": "1",
     "words": 427
+  },
+  "notes/the-hidden-social-aggression-of-ai-progress.html": {
+    "analyzed_at": "2026-06-11T18:31:33+00:00",
+    "pangram": {
+      "fraction_ai": 0.0,
+      "fraction_ai_assisted": 0.0,
+      "fraction_human": 1.0,
+      "headline": "Human Written",
+      "prediction_short": "Human"
+    },
+    "read_time_min": 4,
+    "skill_version": "1",
+    "words": 963
   }
 }
