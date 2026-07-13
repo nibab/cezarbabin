@@ -2,7 +2,6 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://cezarbabin.com/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
   <url><loc>https://cezarbabin.com/about.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://cezarbabin.com/projects.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://cezarbabin.com/notes.html</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
   <url><loc>https://cezarbabin.com/notes/the-hidden-social-aggression-of-ai-progress.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://cezarbabin.com/notes/discovery-vs-tokenmaxxing.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
